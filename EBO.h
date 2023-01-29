@@ -11,7 +11,8 @@ public:
 	GLuint ID;
 	// Constructor that generates a Elements Buffer Object and links it to indices
 	EBO(std::vector<GLuint>& indicies);
-
+	
+	EBO(GLuint bgindices[], GLsizeiptr size);
 	// Binds the EBO
 	void Bind();
 	// Unbinds the EBO

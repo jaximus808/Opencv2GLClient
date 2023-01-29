@@ -13,6 +13,8 @@ public:
 
 	GLFWwindow* getWindow();
 
+	Camera* getCamera();
+
 	void ActivateShader();
 
 

@@ -91,6 +91,12 @@
     <None Include="light.frag">
       <Filter>Resource Files\Shaders</Filter>
     </None>
+    <None Include="background.vert">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
+    <None Include="background.frag">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ShaderClass.h">
@@ -128,6 +134,9 @@
     </ClInclude>
     <ClInclude Include="NetworkManager.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="glext.h">
+      <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

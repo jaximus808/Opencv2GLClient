@@ -13,7 +13,6 @@ std::string get_file_contents(const char* filename)
 		in.read(&contents[0], contents.size());
 
 		in.close();
-
 		return(contents);
 	}
 }
@@ -25,6 +24,7 @@ Shader::Shader()
 
 Shader::Shader(const char* vertexFile, const char* fragmentFile)
 {
+	if (vertexFile == "background.vert") std::cout << "ran" << std::endl;
 	std::string vertexCode = get_file_contents(vertexFile);
 	std::string fragmentCode = get_file_contents(fragmentFile);
 

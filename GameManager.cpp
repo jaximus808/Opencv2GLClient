@@ -65,6 +65,11 @@ void GameManager::UpdateFrame(float deltaTime)
 	clients[0].Draw();*/
 }
 
+Camera* GameManager::getCamera()
+{
+	return &camera;
+}
+
 GLFWwindow* GameManager::getWindow()
 {
 	return window;

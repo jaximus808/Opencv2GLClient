@@ -21,6 +21,8 @@ public:
 	
 	VBO(std::vector<Vertex>& vertices);
 
+	VBO(GLfloat vertices[], GLsizeiptr size);
+	
 	// Binds the VBO
 	void Bind();
 	// Unbinds the VBO
