@@ -6,6 +6,11 @@ Mesh::Mesh(std::vector<Vertex>& vertices, std::vector<GLuint>& indices, std::vec
 	Mesh::indices = indices;
 	Mesh::textures = textures;
 
+	std::cout << "MESH LOAD" << std::endl;
+
+	std::cout << vertices.size() << std::endl;
+	std::cout << indices.size() << std::endl;
+	std::cout << textures.size() << std::endl;
 	VAO.Bind();
 	// Generates Vertex Buffer Object and links it to vertices
 	VBO VBO(vertices);
@@ -39,6 +44,7 @@ void Mesh::Draw
 	// Keep track of how many of each type of textures we have
 	unsigned int numDiffuse = 0;
 	unsigned int numSpecular = 0;
+	//std::cout << textures.size() << std::endl;;
 
 	for (unsigned int i = 0; i < textures.size(); i++)
 	{

@@ -1,5 +1,11 @@
 #include"GameManager.h"
 #include <stdlib.h>
+
+glm::vec3 EulerDegVecToRad(glm::vec3 euler)
+{
+	return glm::vec3(glm::radians(euler.x), glm::radians(euler.y), glm::radians(euler.z) );
+}
+
 void GameManager::ActivateShader()
 {
 	shaderProgram.Activate();
@@ -39,10 +45,12 @@ void GameManager::CreateClient(int modelId, glm::vec3 initialPosition , glm::vec
 	std::string modelPath;
 	if (modelId == 0)
 	{
-		modelPath = "Model/sword/scene.gltf";
+		modelPath = "Model/ClientModel/scene.gltf";
 	}
 	//Client client(0, modelPath.c_str(), shaderProgram, camera, glm::vec3(-25.0f, 0.0f, -50.0f), glm::vec3(0.0f, 0.0f, 0.0f));
+	
 	clients.insert({ 0,Client(0, modelPath.c_str(), shaderProgram, camera, initialPosition, initalRotationEuler) });
+	clients[0].updateClientState(glm::vec3(0.0f,0.0f,0.0f), EulerDegVecToRad(glm::vec3(0.0f, 0.0f, 180.0f)));
 }
 
 void GameManager::UpdateFrame(float deltaTime)
@@ -56,7 +64,7 @@ void GameManager::UpdateFrame(float deltaTime)
 
 	while (it != clients.end())
 	{
-		it->second.moveClientState(glm::vec3(-10.0f * deltaTime, 0.0f, 0.0f), glm::vec3(10.0f * deltaTime, 0.0f, 0.0f));
+		//it->second.moveClientState(glm::vec3(-10.0f * deltaTime, 0.0f, 0.0f), glm::vec3(10.0f * deltaTime, 0.0f, 0.0f));
 		it->second.Draw();
 		it++;
 	}

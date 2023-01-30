@@ -4,12 +4,26 @@
 #include<stb/stb_image.h>
 #include<glm/glm.hpp>
 #include<opencv2/opencv.hpp>
+#include<thread>
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/ext.hpp"
 #include"GameManager.h"
 #include"Packet.h"
 #include"glext.h"
 //use define later
+
+
+void getCameraInput(cv::VideoCapture *cap, cv::Mat *frame, bool *backChanged, bool *cvCapture)
+{
+	while (&cvCapture)
+	{
+		if (!(*backChanged) )
+		{
+			*cap >> *frame;
+			*backChanged = true; 
+		}
+	}
+}
 
 // Vertex Shader source code
 unsigned char* cvMat2TexInput(cv::Mat& img)
@@ -21,7 +35,20 @@ unsigned char* cvMat2TexInput(cv::Mat& img)
 
 int main()
 {
+
+
+
+
+
+
+
+	cv::VideoCapture cap(0);
+	cv::Mat frame;
+	bool backgroundChanged = false;
+	bool cvCapture = true; 
 	
+
+
 	int width = 1200; 
 	int height = 1200;
 	float rotation = 0.0f;
@@ -101,8 +128,6 @@ int main()
 	};
 	//GLFWwindow* window = glfwCreateWindow(width, height, "Client", NULL, NULL);
 
-	cv::VideoCapture cap(0);
-	cv::Mat frame;
 	GLuint VAO, VBO, EBO;
 
 	// Generate the VAO, VBO, and EBO with only 1 object each
@@ -194,7 +219,7 @@ int main()
 
 	unsigned int bgtexture;
 	glGenTextures(1, &bgtexture);
-	glBindTexture(GL_TEXTURE_2D, bgtexture);
+	glBindTexture(GL_TEXTURE_2D, bgtexture); 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -207,24 +232,30 @@ int main()
 
 	std::cout << "WTF?" << std::endl;
 
+	std::thread cvThread(getCameraInput, &cap, &frame, &backgroundChanged, &cvCapture);
 
 	while (!glfwWindowShouldClose(gameManager.getWindow()))
 	{
-		cap >> frame;
-		image = cvMat2TexInput(frame);
-		if (frame.empty())
+		/*cap >> frame;
+		image = cvMat2TexInput(frame);*/
+		if (backgroundChanged)
 		{
-			std::cout << "Cannot open video capture device" << std::endl;
+			if (frame.empty())
+			{
+				std::cout << "Cannot open video capture device" << std::endl;
+			}
+			else
+			{
+				glBindTexture(GL_TEXTURE_2D, bgtexture);
+
+				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB8, frameW, frameH, 0, GL_RGB, GL_UNSIGNED_BYTE, frame.data);
+				glGenerateMipmap(GL_TEXTURE_2D);
+				glBindTexture(GL_TEXTURE_2D, 0);
+				backgroundChanged = false;
+			}
 
 		}
-		else
-		{
-			glBindTexture(GL_TEXTURE_2D, bgtexture);
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB8, frameW, frameH, 0, GL_BGR, GL_UNSIGNED_BYTE, frame.data);
-			glGenerateMipmap(GL_TEXTURE_2D);
-			glBindTexture(GL_TEXTURE_2D, 0);
-		}
-
+		
 		glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
 		//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -255,10 +286,13 @@ int main()
 
 	}
 	
+	cvCapture = false;
 	gameManager.endProgram();
 	backgroundShader.Delete();
 	glDeleteVertexArrays(1, &VAO);
 	glDeleteBuffers(1, &VBO);
 	glDeleteBuffers(1, &EBO);
+	//waits for the cvInput to end;
+	cvThread.join();
 	return 0; 
 }

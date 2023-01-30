@@ -1,5 +1,18 @@
-﻿  main.cpp
+﻿  GameManager.cpp
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\minwindef.h(130,1): warning C4005: 'APIENTRY': macro redefinition
 C:\Users\jaxim\OneDrive\Desktop\CodingProjects\ScienceFair2022_2023_Client\Libraries\include\glad\glad.h(32,1): message : see previous definition of 'APIENTRY'
-C:\Users\jaxim\OneDrive\Desktop\CodingProjects\ScienceFair2022_2023_Client\main.cpp(247,28): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+  Mesh.cpp
+C:\Users\jaxim\OneDrive\Desktop\CodingProjects\ScienceFair2022_2023_Client\Mesh.cpp(82,65): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
+  Model.cpp
+C:\Users\jaxim\OneDrive\Desktop\CodingProjects\ScienceFair2022_2023_Client\Model.cpp(311,93): warning C4267: 'argument': conversion from 'size_t' to 'GLenum', possible loss of data
+C:\Users\jaxim\OneDrive\Desktop\CodingProjects\ScienceFair2022_2023_Client\Model.cpp(320,95): warning C4267: 'argument': conversion from 'size_t' to 'GLenum', possible loss of data
+  VAO.cpp
+C:\Users\jaxim\OneDrive\Desktop\CodingProjects\ScienceFair2022_2023_Client\VAO.cpp(12,63): warning C4244: 'argument': conversion from 'GLsizeiptr' to 'GLsizei', possible loss of data
+  VBO.cpp
+  client.cpp
+  main.cpp
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\minwindef.h(130,1): warning C4005: 'APIENTRY': macro redefinition
+C:\Users\jaxim\OneDrive\Desktop\CodingProjects\ScienceFair2022_2023_Client\Libraries\include\glad\glad.h(32,1): message : see previous definition of 'APIENTRY'
+C:\Users\jaxim\OneDrive\Desktop\CodingProjects\ScienceFair2022_2023_Client\main.cpp(278,28): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+  Generating Code...
   ScienceFair2022_2023_Client.vcxproj -> C:\Users\jaxim\OneDrive\Desktop\CodingProjects\ScienceFair2022_2023_Client\x64\Debug\ScienceFair2022_2023_Client.exe

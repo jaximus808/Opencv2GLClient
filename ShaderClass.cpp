@@ -2,7 +2,6 @@
 
 std::string get_file_contents(const char* filename)
 {
-	std::cout << "NMEOW" << std::endl;
 	std::ifstream in(filename, std::ios::binary);
 	if (in)
 	{

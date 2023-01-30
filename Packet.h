@@ -25,11 +25,22 @@ public:
 
     int size();
 
+    void clearPacket();
+
+    void setPacket(char packet[]);
+
+    char* getCharBuffer();
+
+    void setBuffPacketToReadableBuffer();
+
+    void setIp(char* ipSet);
+
 private:
     char* bufferPacket;
     int readPos = 0;
     int packetLen;
     std::vector<char> buffer;
+    char* ip;
 
 };
 

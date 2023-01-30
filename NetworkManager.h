@@ -12,6 +12,9 @@ public:
 	int SendData(Packet packet);
 
 	void CloseSocket();
+
+	void ReceiveFromServer(std::vector<Packet> *PacketQueue, bool* listeningToServer);
+
 private:
 	WSADATA data; 
 	WORD version = MAKEWORD(2, 2);

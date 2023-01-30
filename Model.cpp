@@ -231,6 +231,9 @@ std::vector<GLuint> Model::getIndices(json accessor)
 	unsigned int accByteOffset = accessor.value("byteOffset", 0);
 	unsigned int componentType = accessor["componentType"];
 
+	std::cout << "indices" << std::endl;
+	std::cout << count << std::endl;
+
 	// Get properties from the bufferView
 	json bufferView = JSON["bufferViews"][buffViewInd];
 	unsigned int byteOffset = bufferView["byteOffset"];
@@ -278,7 +281,9 @@ std::vector<Texture> Model::getTextures()
 	std::string fileStr = std::string(file);
 	std::string fileDirectory = fileStr.substr(0, fileStr.find_last_of('/') + 1);
 
+	std::cout << "POGGERS?" << std::endl;
 	// Go over all images
+	std::cout << JSON["images"].size() << std::endl;
 	for (unsigned int i = 0; i < JSON["images"].size(); i++)
 	{
 		// uri of current texture
@@ -299,6 +304,7 @@ std::vector<Texture> Model::getTextures()
 		// If the texture has been loaded, skip this
 		if (!skip)
 		{
+			std::cout << "WTF?"<<std::endl;
 			// Load diffuse texture
 			if (texPath.find("baseColor") != std::string::npos)
 			{
@@ -306,6 +312,7 @@ std::vector<Texture> Model::getTextures()
 				textures.push_back(diffuse);
 				loadedTex.push_back(diffuse);
 				loadedTexName.push_back(texPath);
+				std::cout << "MEOW?" << std::endl;
 			}
 			// Load specular texture
 			else if (texPath.find("metallicRoughness") != std::string::npos)
@@ -329,6 +336,9 @@ std::vector<Vertex> Model::assembleVertices
 )
 {
 	std::vector<Vertex> vertices;
+	std::cout << "verticeCheck"<<std::endl;
+
+	std::cout << positions.size() << std::endl;
 	for (int i = 0; i < positions.size(); i++)
 	{
 		vertices.push_back

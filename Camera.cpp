@@ -54,14 +54,14 @@ void Camera::Inputs(float deltaTime)
 	{
 		Position += speed * deltaTime * glm::normalize(glm::cross(Orientation, Up));
 	}
-	if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
+	/*if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
 	{
 		Position += speed * deltaTime * Up;
-	}
-	if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
+	}*/
+	/*if (glfwGetKey(window, GLFW_KEY_C) == GLFW_PRESS)
 	{
-		Position += speed * deltaTime * -Up;
-	}
+		Position += speed * deltaTime * Up;
+	}*/
 	if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
 	{
 		speed = 70.0f;
