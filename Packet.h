@@ -9,6 +9,8 @@
 #include<iostream>
 #include <vector>
 
+#include<glm/glm.hpp>
+
 class Packet
 {
 public:
@@ -16,6 +18,10 @@ public:
     Packet(char packet[]);
 
     int readInt();
+
+    float readFloat();
+
+    glm::vec3 readVector3();
 
     void Write(int n);
 

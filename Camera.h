@@ -23,6 +23,9 @@ class Camera
 
 		glm::mat4 cameraMatrix = glm::mat4(1.0f);
 
+		float eulerRotX;
+		float eulerRotY;
+
 		GLFWwindow *window;
 		int width;
 		int height;
@@ -34,6 +37,8 @@ class Camera
 
 		Camera(int width, int height, glm::vec3 position, GLFWwindow* window);
 		Camera();
+
+		void setPosition(glm::vec3 newPosition);
 
 		void updateMatrix(float FOVdeg, float nearPlane, float farPlane);
 		void Matrix(Shader& shader, const char* uniform);

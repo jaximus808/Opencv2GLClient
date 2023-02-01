@@ -22,6 +22,29 @@ Model::Model(const char* file, Shader& shader, Camera& camera, glm::vec3 initial
 	rotation = glm::quat(initalRot);
 }
 
+Model::Model(const char* file, Shader& shader, Camera& camera, glm::vec3 initialPosition, glm::quat initalRot)
+{
+	// Make a JSON object
+	std::string text = get_file_contents(file);
+	JSON = json::parse(text);
+
+	// Get the binary data
+	Model::file = file;
+	data = getData();
+
+	// Traverse all nodes
+	traverseNode(0);
+
+	//covert shader to address
+	crntShader = &shader;
+	crntCamera = &camera;
+	position = initialPosition;
+	//converts euler angles to quaternion
+	eulerRotation = glm::eulerAngles(initalRot);
+	rotation = initalRot;
+}
+
+
 Model::Model()
 {
 

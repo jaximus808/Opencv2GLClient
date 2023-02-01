@@ -3,6 +3,7 @@
 #include<iostream>
 #include<WS2tcpip.h>
 #include"Packet.h"
+#include<thread>
 class NetworkManager
 {
 public: 
@@ -13,8 +14,12 @@ public:
 
 	void CloseSocket();
 
-	void ReceiveFromServer(std::vector<Packet> *PacketQueue, bool* listeningToServer);
+	void BeginThread(std::vector<Packet>* PacketQueue, bool* listeningToServer);
 
+	void ReceiveFromServer(std::vector<Packet> *PacketQueue, bool* listeningToServer);
+	void StopThread();
+
+	
 private:
 	WSADATA data; 
 	WORD version = MAKEWORD(2, 2);
@@ -22,6 +27,7 @@ private:
 	SOCKET out; 
 	Packet packet; 
 
+	std::thread recieveThread;
 
 	const char* ip;
 	int port; 

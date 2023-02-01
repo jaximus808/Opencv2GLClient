@@ -36,11 +36,8 @@ unsigned char* cvMat2TexInput(cv::Mat& img)
 int main()
 {
 
-
-
-
-
-
+	std::vector<Packet> packetQueue; 
+	bool listeningToServer = true;
 
 	cv::VideoCapture cap(0);
 	cv::Mat frame;
@@ -65,23 +62,6 @@ int main()
 	Shader backgroundShader("background.vert", "background.frag");
 	// Vertices coordinates
 
-	/*0, 1, 2,
-		0, 2, 3,
-
-		0, 1, 5,
-		0, 4, 5,
-
-		1, 2, 6,
-		1, 5, 6,
-
-		2, 3, 7,
-		2, 6, 7,
-
-		3, 0, 4,
-		3, 7, 4,
-
-		4, 5, 6,
-		4, 6, 7,*/
 
 	Vertex lightVertices[] =
 	{ //     COORDINATES     //
@@ -164,24 +144,6 @@ int main()
 
 
 
-	//Shader backgroundShader("background.vert", "background.frag");
-	//VAO backgroundVAO;
-	//backgroundVAO.Bind();
-
-	//VBO backgroundVBO(vertices);
-
-	//backgroundVAO.LinkAttrib(backgroundVBO, 6, 3, GL_FLOAT, 3 * sizeof(GLfloat), (void*)0);
-	////backgroundVAO.LinkAttrib(backgroundVBO, 1, 2, GL_FLOAT, 5 * sizeof(GLfloat), (void*)(3 * sizeof(GLfloat)));
-	//backgroundVAO.UnBind();
-	//backgroundVBO.UnBind();
-	
-	
-	Packet packet;
-
-	packet.Write(5);
-
-	gameManager.SendData(packet);
-
 
 	std::cout << "FORTNITE" << std::endl;
 
@@ -234,10 +196,32 @@ int main()
 
 	std::thread cvThread(getCameraInput, &cap, &frame, &backgroundChanged, &cvCapture);
 
+	gameManager.StartRecieve(&packetQueue, &listeningToServer);
+
+	//Packet packet;
+
+	//packet.Write(5);
+
+	//gameManager.SendData(packet);
+
+	gameManager.ConnectToMeta();
+
+
 	while (!glfwWindowShouldClose(gameManager.getWindow()))
 	{
+		/*if (packetQueue.size() > 0)
+		{
+			gameManager.handlePacket();
+		}*/
 		/*cap >> frame;
 		image = cvMat2TexInput(frame);*/
+
+		if (packetQueue.size() > 0)
+		{
+			std::cout << "LESS GO" << std::endl;
+			gameManager.handlePacket(packetQueue[0]);
+			packetQueue.erase(packetQueue.begin(), packetQueue.begin() + 1);
+		}
 		if (backgroundChanged)
 		{
 			if (frame.empty())
@@ -285,14 +269,15 @@ int main()
 		glfwPollEvents();
 
 	}
-	
+	listeningToServer = false;
 	cvCapture = false;
+	gameManager.EndRecieve();
+	cvThread.join();
 	gameManager.endProgram();
 	backgroundShader.Delete();
 	glDeleteVertexArrays(1, &VAO);
 	glDeleteBuffers(1, &VBO);
 	glDeleteBuffers(1, &EBO);
 	//waits for the cvInput to end;
-	cvThread.join();
 	return 0; 
 }

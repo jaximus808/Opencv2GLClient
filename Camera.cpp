@@ -7,12 +7,18 @@ Camera::Camera(int width, int height, glm::vec3 position, GLFWwindow* _window)
 	Position = position;
 	window = _window;
 	glfwSetCursorPos(window, width / 2, height / 2);
-	
+	eulerRotX = 0.0f;
+	eulerRotY = 0.0f;
 }
 
 Camera::Camera()
 {
 
+}
+
+void Camera::setPosition(glm::vec3 newPosition)
+{
+	Position = newPosition;
 }
 
 void Camera::updateMatrix(float FOVdeg, float nearPlane, float farPlane)
@@ -22,6 +28,8 @@ void Camera::updateMatrix(float FOVdeg, float nearPlane, float farPlane)
 
 	view = glm::lookAt(Position, Position + Orientation, Up);
 	projection = glm::perspective(glm::radians(FOVdeg), (float)(width / height), nearPlane, farPlane);
+
+	//use orientation.x for "y" euler idk why lol
 
 	//glUniformMatrix4fv(glGetUniformLocation(shader.ID, uniform), 1, GL_FALSE, glm::value_ptr(projection * view));
 
@@ -36,7 +44,6 @@ void Camera::Matrix(Shader& shader, const char* uniform)
 
 void Camera::Inputs(float deltaTime)
 {	
-
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
 	{
 		Position += speed* deltaTime * Orientation;
@@ -92,13 +99,15 @@ void Camera::Inputs(float deltaTime)
 		glfwGetCursorPos(window, &mouseX, &mouseY);
 		float rotX = sensitivity * (float)(mouseY - (height / 2)) / height;
 		float rotY = sensitivity * (float)(mouseX - (height / 2)) / width;
-
+		
 		glm::vec3 newOrientation = glm::rotate(Orientation, glm::radians(-rotX), glm::normalize(glm::cross(Orientation, Up)));
 		if (!(glm::angle(newOrientation, Up) <= glm::radians(5.0f) || glm::angle(newOrientation, -Up) <= glm::radians(5.0f)))
 		{
 			Orientation = newOrientation;
+			eulerRotX += rotX;
 		}
 
+		eulerRotY -= rotY;
 		Orientation = glm::rotate(Orientation, glm::radians(-rotY), Up);
 
 		glfwSetCursorPos(window, width / 2, height / 2);

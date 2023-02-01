@@ -11,6 +11,9 @@ class Model
 public: 
 	Model(const char* file, Shader& shader, Camera& camera, glm::vec3 initialPosition = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 initalRotationEuler = glm::vec3(0.0f, 0.0f, 0.0f));
 
+
+	Model(const char* file, Shader& shader, Camera& camera, glm::vec3 initialPosition = glm::vec3(0.0f, 0.0f, 0.0f), glm::quat initalRotationEuler = glm::quat(0.0f, 0.0f, 0.0f, 0.0f));
+
 	Model();
 
 	void Draw();

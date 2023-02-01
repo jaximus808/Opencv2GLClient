@@ -19,6 +19,25 @@ int Packet::readInt()
 		return i;
 }
 
+float Packet::readFloat()
+{
+	long x = (long)buffer[readPos + 3] << 24 | (long)buffer[readPos + 2] << 16 | buffer[readPos + 1] << 8 | buffer[readPos];
+	readPos += 4;
+	union
+	{
+		long y;
+		float z;
+	}data;
+	data.y = x;
+	return data.z;
+	
+}
+
+glm::vec3 Packet::readVector3()
+{
+	return glm::vec3(readFloat(), readFloat(), readFloat());
+}
+
 char* Packet::getCharBuffer()
 {
 	return bufferPacket;

@@ -4,6 +4,8 @@
 #include <unordered_map>
 #include"client.h"
 #include"NetworkManager.h"
+#include<thread>
+#include"Packet.h"
 class GameManager
 {
 public: 
@@ -17,6 +19,7 @@ public:
 
 	void ActivateShader();
 
+	void StartRecieve(std::vector<Packet>* packetQueue, bool* listeningToServer);
 
 	int getShaderId();
 
@@ -25,6 +28,20 @@ public:
 	void UpdateFrame(float deltaTime);
 
 	void SendData(Packet packet);
+
+	void handlePacket(Packet packet);
+
+	void initalGameState(int localId, std::vector<int> ids, std::vector<glm::vec3> positions, std::vector<glm::vec3> rotations, std::vector<int> modelId);
+
+	void CreateClient(int modelId, glm::vec3 initialPosition, glm::quat initalRotationQuat);
+
+	void updatePlayerState(int updateId, std::vector<glm::vec3> positions, std::vector<glm::vec3> rotations);
+
+	void handlePacket(Packet _packet);
+
+	void ConnectToMeta();
+
+	void EndRecieve();
 
 private:
 	std::unordered_map<int, Client> clients;
@@ -36,7 +53,14 @@ private:
 
 	GLFWwindow* window;
 
-	NetworkManager socket =  NetworkManager("192.168.1.13",8000);
+	NetworkManager socket =  NetworkManager("192.168.1.8",8000);
+	int id; 
+	int localModelId; 
+
+	bool listeningRecieve; 
+
+	int windowWidth;
+	int windowHeight;
 };
 
 #endif // !GAMEMANAGER_H

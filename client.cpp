@@ -5,6 +5,11 @@ Client::Client(int _id, const char* _modelpath, Shader& shader, Camera& camera, 
 	clientModel = Model(_modelpath, shader, camera, initialPosition, initalRotationEuler);
 }
 
+Client::Client(int _id, const char* _modelpath, Shader& shader, Camera& camera, glm::vec3 initialPosition, glm::quat initalRotationEuler)
+{
+	clientModel = Model(_modelpath, shader, camera, initialPosition, initalRotationEuler);
+}
+
 Client::Client()
 {
 

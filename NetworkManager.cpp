@@ -18,6 +18,19 @@ NetworkManager::NetworkManager(const char* _ip, int _port)
 	out = socket(AF_INET, SOCK_DGRAM, 0);	
 }
 
+//void NetworkManager::ConnectToMeta()
+//{
+//	Packet initalPacket;
+//
+//	initalPacket.Write(0);
+//
+//}
+
+void NetworkManager::BeginThread(std::vector<Packet>* packetQueue, bool* listeningToServer)
+{
+	recieveThread = std::thread(&NetworkManager::ReceiveFromServer, this,  packetQueue, listeningToServer);
+}
+
 void NetworkManager::ReceiveFromServer(std::vector<Packet> *packetQueue, bool *listeningToServer)
 {	
 	SOCKET in = socket(AF_INET, SOCK_DGRAM, 0);
@@ -25,7 +38,7 @@ void NetworkManager::ReceiveFromServer(std::vector<Packet> *packetQueue, bool *l
 	sockaddr_in clientSocket;
 	clientSocket.sin_addr.S_un.S_addr = ADDR_ANY; 
 	clientSocket.sin_family = AF_INET;
-	clientSocket.sin_port = htons(8001); 
+	clientSocket.sin_port = htons(8001);
 	if (bind(in, (sockaddr*)&clientSocket, sizeof(clientSocket)) == SOCKET_ERROR)
 	{
 		std::cout << "Can't bind socket! " << WSAGetLastError() << std::endl;
@@ -38,6 +51,7 @@ void NetworkManager::ReceiveFromServer(std::vector<Packet> *packetQueue, bool *l
 	char buf[1024];
 	while (&listeningToServer)
 	{
+		std::cout << "listening" << std::endl;
 		ZeroMemory(&server, serverLength); // Clear the client structure
 		ZeroMemory(buf, 1024); // Clear the receive buffer
 		int bytesIn = recvfrom(in, buf, 1024, 0, (sockaddr*)&server, &serverLength);
@@ -46,7 +60,7 @@ void NetworkManager::ReceiveFromServer(std::vector<Packet> *packetQueue, bool *l
 			std::cout << "Error receiving from client " << WSAGetLastError() << std::endl;
 			continue;
 		}
-
+		std::cout << "data recieved " << std::endl;
 		char clientIp[256];
 		ZeroMemory(clientIp, 256);
 
@@ -75,6 +89,11 @@ int NetworkManager::SendData(Packet packet)
 	return 1;
 
 	
+}
+
+void NetworkManager::StopThread()
+{
+	recieveThread.join();
 }
 
 void NetworkManager::CloseSocket()
