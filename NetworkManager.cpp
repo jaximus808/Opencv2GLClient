@@ -33,7 +33,7 @@ void NetworkManager::BeginThread(std::vector<Packet>* packetQueue, bool* listeni
 
 void NetworkManager::ReceiveFromServer(std::vector<Packet> *packetQueue, bool *listeningToServer)
 {	
-	SOCKET in = socket(AF_INET, SOCK_DGRAM, 0);
+	in = socket(AF_INET, SOCK_DGRAM, 0);
 
 	sockaddr_in clientSocket;
 	clientSocket.sin_addr.S_un.S_addr = ADDR_ANY; 
@@ -49,7 +49,7 @@ void NetworkManager::ReceiveFromServer(std::vector<Packet> *packetQueue, bool *l
 
 	Packet packetBuffer;
 	char buf[1024];
-	while (&listeningToServer)
+	while (*listeningToServer)
 	{
 		std::cout << "listening" << std::endl;
 		ZeroMemory(&server, serverLength); // Clear the client structure
@@ -57,6 +57,7 @@ void NetworkManager::ReceiveFromServer(std::vector<Packet> *packetQueue, bool *l
 		int bytesIn = recvfrom(in, buf, 1024, 0, (sockaddr*)&server, &serverLength);
 		if (bytesIn == SOCKET_ERROR)
 		{
+			std::cout << *listeningToServer << std::endl;
 			std::cout << "Error receiving from client " << WSAGetLastError() << std::endl;
 			continue;
 		}
@@ -93,6 +94,7 @@ int NetworkManager::SendData(Packet packet)
 
 void NetworkManager::StopThread()
 {
+	closesocket(in);
 	recieveThread.join();
 }
 

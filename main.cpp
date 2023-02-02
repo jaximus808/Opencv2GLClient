@@ -15,7 +15,7 @@
 
 void getCameraInput(cv::VideoCapture *cap, cv::Mat *frame, bool *backChanged, bool *cvCapture)
 {
-	while (&cvCapture)
+	while (*cvCapture)
 	{
 		if (!(*backChanged) )
 		{
@@ -43,7 +43,7 @@ int main()
 	cv::Mat frame;
 	bool backgroundChanged = false;
 	bool cvCapture = true; 
-	
+	bool connectedToServer = false; 
 
 
 	int width = 1200; 
@@ -194,7 +194,7 @@ int main()
 
 	std::cout << "WTF?" << std::endl;
 
-	std::thread cvThread(getCameraInput, &cap, &frame, &backgroundChanged, &cvCapture);
+	std::thread cvThread(getCameraInput, &cap, &frame, &backgroundChanged, &cvCapture );
 
 	gameManager.StartRecieve(&packetQueue, &listeningToServer);
 
@@ -218,9 +218,8 @@ int main()
 
 		if (packetQueue.size() > 0)
 		{
-			std::cout << "LESS GO" << std::endl;
 			gameManager.handlePacket(packetQueue[0]);
-			packetQueue.erase(packetQueue.begin(), packetQueue.begin() + 1);
+			packetQueue.erase(packetQueue.begin());
 		}
 		if (backgroundChanged)
 		{
@@ -269,6 +268,7 @@ int main()
 		glfwPollEvents();
 
 	}
+	std::cout << "program ended" << std::endl;
 	listeningToServer = false;
 	cvCapture = false;
 	gameManager.EndRecieve();

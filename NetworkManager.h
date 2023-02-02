@@ -26,6 +26,7 @@ private:
 	sockaddr_in server;
 	SOCKET out; 
 	Packet packet; 
+	SOCKET in;
 
 	std::thread recieveThread;
 

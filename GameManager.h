@@ -37,8 +37,6 @@ public:
 
 	void updatePlayerState(int updateId, std::vector<glm::vec3> positions, std::vector<glm::vec3> rotations);
 
-	void handlePacket(Packet _packet);
-
 	void ConnectToMeta();
 
 	void EndRecieve();
