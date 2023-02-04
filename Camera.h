@@ -9,8 +9,8 @@
 #include<glm/gtx/vector_angle.hpp>
 #include<glm/gtx/rotate_vector.hpp>
 #include<glm/gtc/type_ptr.hpp>
-
 #include<glm/gtc/matrix_transform.hpp>
+#include<vector>
 
 #include"ShaderClass.h"
 
@@ -43,7 +43,7 @@ class Camera
 		void updateMatrix(float FOVdeg, float nearPlane, float farPlane);
 		void Matrix(Shader& shader, const char* uniform);
 
-		void Inputs( float deltaTime);
+		std::vector<glm::vec3> Inputs( float deltaTime);
 };
 
 

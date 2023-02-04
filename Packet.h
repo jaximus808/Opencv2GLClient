@@ -25,6 +25,10 @@ public:
 
     void Write(int n);
 
+    void Write(float n);
+
+    void Write(glm::vec3 n);
+
     void printVector();
 
     char* readPacket();

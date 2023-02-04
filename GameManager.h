@@ -11,7 +11,7 @@ class GameManager
 public: 
 	GameManager(const char* setTarget, unsigned int setPort, const char* vertShader, const char* fragShader, int width, int height, glm::vec3 camPos, const char* windowName);
 
-	void CreateClient(int modelId, glm::vec3 initialPosition = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 initalRotationEuler = glm::vec3(0.0f, 0.0f, 0.0f));
+	void CreateClient(int clientId, int modelId, glm::vec3 initialPosition = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 initalRotationEuler = glm::vec3(0.0f, 0.0f, 0.0f));
 
 	GLFWwindow* getWindow();
 
@@ -19,7 +19,7 @@ public:
 
 	void ActivateShader();
 
-	void StartRecieve(std::vector<Packet>* packetQueue, bool* listeningToServer);
+	void StartRecieve(std::vector<Packet >* packetQueue, bool* listeningToServer);
 
 	int getShaderId();
 
@@ -29,11 +29,10 @@ public:
 
 	void SendData(Packet packet);
 
-	void handlePacket(Packet packet);
+	void handlePacket(Packet *packet);
 
 	void initalGameState(int localId, std::vector<int> ids, std::vector<glm::vec3> positions, std::vector<glm::vec3> rotations, std::vector<int> modelId);
 
-	void CreateClient(int modelId, glm::vec3 initialPosition, glm::quat initalRotationQuat);
 
 	void updatePlayerState(int updateId, std::vector<glm::vec3> positions, std::vector<glm::vec3> rotations);
 
@@ -51,8 +50,8 @@ private:
 
 	GLFWwindow* window;
 
-	NetworkManager socket =  NetworkManager("192.168.1.8",8000);
-	int id; 
+	NetworkManager socket =  NetworkManager("192.168.1.11",8000);
+	int id = -1; 
 	int localModelId; 
 
 	bool listeningRecieve; 

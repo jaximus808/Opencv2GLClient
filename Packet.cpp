@@ -7,6 +7,8 @@ Packet::Packet()
 
 Packet::Packet(char packet[])
 {
+	std::cout << "Packet " << std::endl;
+	std::cout << packetLen << std::endl;
 	packetLen = sizeof(packet);
 	buffer.insert(buffer.begin(), &packet[0], &packet[packetLen-1]);
 }
@@ -59,6 +61,22 @@ void Packet::Write(int n)
 		bytes);
 	buffer.insert(buffer.end(), &bytes[0], &bytes[sizeof(n)]);
 
+}
+
+
+void Packet::Write(float n)
+{
+
+	char bytes[10];
+	sprintf_s(bytes, "%f", n);
+	buffer.insert(buffer.end(), &bytes[0], &bytes[sizeof(n)]); 
+}
+
+void Packet::Write(glm::vec3 n)
+{
+	this->Write(n.x);
+	this->Write(n.y);
+	this->Write(n.z);
 }
 
 void Packet::printVector()

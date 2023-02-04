@@ -42,8 +42,12 @@ void Camera::Matrix(Shader& shader, const char* uniform)
 	glUniformMatrix4fv(glGetUniformLocation(shader.ID, uniform), 1, GL_FALSE, glm::value_ptr(cameraMatrix));
 }
 
-void Camera::Inputs(float deltaTime)
-{	
+std::vector<glm::vec3>Camera::Inputs( float deltaTime)
+{
+	std::vector<glm::vec3> returnValue = { glm::vec3(0.0f),glm::vec3(0.0f) };
+	glm::vec3 prevPosition = Position; 
+	glm::vec3 prevOrientation = Orientation;
+	
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
 	{
 		Position += speed* deltaTime * Orientation;
@@ -78,7 +82,10 @@ void Camera::Inputs(float deltaTime)
 		speed = 10.0f;
 	}
 
-
+	if (Position != prevPosition)
+	{
+		returnValue[0] = (Position);
+	}
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 	{
 
@@ -110,10 +117,14 @@ void Camera::Inputs(float deltaTime)
 		eulerRotY -= rotY;
 		Orientation = glm::rotate(Orientation, glm::radians(-rotY), Up);
 
+		
+		if (Orientation != prevOrientation)
+		{
+			returnValue[1] =(glm::vec3(eulerRotX, eulerRotY, 0.0f));
+		}
 		glfwSetCursorPos(window, width / 2, height / 2);
 	}
 
-	
-	
+	return returnValue; 
 
 }

@@ -31,7 +31,7 @@ void NetworkManager::BeginThread(std::vector<Packet>* packetQueue, bool* listeni
 	recieveThread = std::thread(&NetworkManager::ReceiveFromServer, this,  packetQueue, listeningToServer);
 }
 
-void NetworkManager::ReceiveFromServer(std::vector<Packet> *packetQueue, bool *listeningToServer)
+void NetworkManager::ReceiveFromServer(std::vector<Packet > *packetQueue, bool *listeningToServer)
 {	
 	in = socket(AF_INET, SOCK_DGRAM, 0);
 
@@ -47,11 +47,9 @@ void NetworkManager::ReceiveFromServer(std::vector<Packet> *packetQueue, bool *l
 	sockaddr_in server;
 	int serverLength = sizeof(server);
 
-	Packet packetBuffer;
 	char buf[1024];
 	while (*listeningToServer)
 	{
-		std::cout << "listening" << std::endl;
 		ZeroMemory(&server, serverLength); // Clear the client structure
 		ZeroMemory(buf, 1024); // Clear the receive buffer
 		int bytesIn = recvfrom(in, buf, 1024, 0, (sockaddr*)&server, &serverLength);
@@ -64,11 +62,10 @@ void NetworkManager::ReceiveFromServer(std::vector<Packet> *packetQueue, bool *l
 		std::cout << "data recieved " << std::endl;
 		char clientIp[256];
 		ZeroMemory(clientIp, 256);
-
+		std::cout << sizeof(buf) << std::endl;
+		Packet(buf);
 		inet_ntop(AF_INET, &server.sin_addr, clientIp, 256);
-		packetBuffer.clearPacket();
-		packetBuffer.setPacket(buf);
-		packetQueue->push_back(packetBuffer);
+		packetQueue->push_back(Packet(buf));
 	}
 	closesocket(in);
 

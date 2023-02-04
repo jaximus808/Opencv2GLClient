@@ -147,6 +147,7 @@
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="NetworkManager.cpp" />
     <ClCompile Include="Packet.cpp" />
+    <ClCompile Include="SerialPort.cpp" />
     <ClCompile Include="ShaderClass.cpp" />
     <ClCompile Include="stb.cpp" />
     <ClCompile Include="test.cpp" />
@@ -176,6 +177,7 @@
     <ClInclude Include="Model.h" />
     <ClInclude Include="NetworkManager.h" />
     <ClInclude Include="Packet.h" />
+    <ClInclude Include="SerialPort.h" />
     <ClInclude Include="ShaderClass.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="VAO.h" />

@@ -1,7 +1,9 @@
-#include<iostream>
 #include<glad/glad.h>
 #include<GLFW/glfw3.h>
 #include<stb/stb_image.h>
+#include<iomanip>
+#include"SerialPort.h"
+#include<string>
 #include<glm/glm.hpp>
 #include<opencv2/opencv.hpp>
 #include<thread>
@@ -25,6 +27,7 @@ void getCameraInput(cv::VideoCapture *cap, cv::Mat *frame, bool *backChanged, bo
 	}
 }
 
+
 // Vertex Shader source code
 unsigned char* cvMat2TexInput(cv::Mat& img)
 {
@@ -35,8 +38,12 @@ unsigned char* cvMat2TexInput(cv::Mat& img)
 
 int main()
 {
+	char inputData[20];
+	//double oldFreq = 60.0;
 
-	std::vector<Packet> packetQueue; 
+
+
+	std::vector<Packet> packetQueue;
 	bool listeningToServer = true;
 
 	cv::VideoCapture cap(0);
@@ -57,7 +64,7 @@ int main()
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	GameManager gameManager("127.0.0.1", 8000, "default.vert", "default.frag", width, height, glm::vec3(0.0f, 0.0f, 2.0f), "Client");
 
-	gameManager.CreateClient(0, glm::vec3(-25.5f, 0.0f, -50.0f), glm::vec3(0.0f, 0.0f, 0.0f));
+	//gameManager.CreateClient(0, glm::vec3(-25.5f, 0.0f, -50.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 
 	Shader backgroundShader("background.vert", "background.frag");
 	// Vertices coordinates
@@ -108,23 +115,23 @@ int main()
 	};
 	//GLFWwindow* window = glfwCreateWindow(width, height, "Client", NULL, NULL);
 
-	GLuint VAO, VBO, EBO;
+	GLuint bVAO, bVBO, bEBO;
 
 	// Generate the VAO, VBO, and EBO with only 1 object each
-	glGenVertexArrays(1, &VAO);
-	glGenBuffers(1, &VBO);
-	glGenBuffers(1, &EBO);
+	glGenVertexArrays(1, &bVAO);
+	glGenBuffers(1, &bVBO);
+	glGenBuffers(1, &bEBO);
 
 	// Make the VAO the current Vertex Array Object by binding it
-	glBindVertexArray(VAO);
+	glBindVertexArray(bVAO);
 
 	// Bind the VBO specifying it's a GL_ARRAY_BUFFER
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBindBuffer(GL_ARRAY_BUFFER, bVBO);
 	// Introduce the vertices into the VBO
 	glBufferData(GL_ARRAY_BUFFER, sizeof(bgvertices), bgvertices, GL_STATIC_DRAW);
 
 	// Bind the EBO specifying it's a GL_ELEMENT_ARRAY_BUFFER
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bEBO);
 	// Introduce the indices into the EBO
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(bgindices), bgindices, GL_STATIC_DRAW);
 
@@ -205,8 +212,6 @@ int main()
 	//gameManager.SendData(packet);
 
 	gameManager.ConnectToMeta();
-
-
 	while (!glfwWindowShouldClose(gameManager.getWindow()))
 	{
 		/*if (packetQueue.size() > 0)
@@ -218,7 +223,9 @@ int main()
 
 		if (packetQueue.size() > 0)
 		{
-			gameManager.handlePacket(packetQueue[0]);
+			std::cout << packetQueue[0].size() << std::endl;
+			gameManager.handlePacket(&packetQueue[0]);
+			std::cout << packetQueue[0].size()<<std::endl;
 			packetQueue.erase(packetQueue.begin());
 		}
 		if (backgroundChanged)
@@ -238,7 +245,7 @@ int main()
 			}
 
 		}
-		
+
 		glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
 		//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -252,17 +259,16 @@ int main()
 		backgroundShader.Activate();
 		glBindTexture(GL_TEXTURE_2D, bgtexture);
 		// Bind the VAO so OpenGL knows to use it
-		glBindVertexArray(VAO);
+		glBindVertexArray(bVAO);
 		// Draw primitives, number of indices, datatype of indices, index of indices
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-		
 
 		glEnable(GL_DEPTH_TEST);
 		currentTime = glfwGetTime();
 		deltaTime = currentTime - prevTime;
 		prevTime = currentTime;
 		gameManager.UpdateFrame(deltaTime);
-		
+
 		
 		glfwSwapBuffers(gameManager.getWindow());
 		glfwPollEvents();
@@ -275,9 +281,9 @@ int main()
 	cvThread.join();
 	gameManager.endProgram();
 	backgroundShader.Delete();
-	glDeleteVertexArrays(1, &VAO);
-	glDeleteBuffers(1, &VBO);
-	glDeleteBuffers(1, &EBO);
+	glDeleteVertexArrays(1, &bVAO);
+	glDeleteBuffers(1, &bVBO);
+	glDeleteBuffers(1, &bEBO);
 	//waits for the cvInput to end;
 	return 0; 
 }

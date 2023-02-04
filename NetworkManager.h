@@ -16,7 +16,7 @@ public:
 
 	void BeginThread(std::vector<Packet>* PacketQueue, bool* listeningToServer);
 
-	void ReceiveFromServer(std::vector<Packet> *PacketQueue, bool* listeningToServer);
+	void ReceiveFromServer(std::vector<Packet > *PacketQueue, bool* listeningToServer);
 	void StopThread();
 
 	
